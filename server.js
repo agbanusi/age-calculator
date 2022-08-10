@@ -3,15 +3,16 @@ const app = express();
 const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 
-const ageLimiter = rateLimit({
+const limiter = rateLimit({
   windowMs: 1000, // 1 second
   max: 3, // limit to 3 calls per second
   message: { message: "Too many calls, wait a few moments and try again" },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
+app.use(limiter);
 
-app.get("/ageCalculator", ageLimiter, (req, res) => {
+app.get("/ageCalculator", (req, res) => {
   try {
     const { dob } = req.query;
     if (!dob || isNaN(dob)) {
