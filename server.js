@@ -12,7 +12,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.get("/ageCalculator", (req, res) => {
+app.get("/howold", ageLimiter, (req, res) => {
   try {
     const { dob } = req.query;
     if (!dob || isNaN(dob)) {
@@ -29,9 +29,9 @@ app.get("/ageCalculator", (req, res) => {
     const year = 1000 * 3600 * 24 * 365.25; //one year = 365 + 1/4 days
     const age = diff / year;
 
-    res.json({ age: Math.floor(age), message: "successful" });
+    return res.json({ age: Math.floor(age), message: "successful" });
   } catch (e) {
-    res.status(500).json({ message: e.message });
+    return res.status(500).json({ message: e.message });
   }
 });
 
