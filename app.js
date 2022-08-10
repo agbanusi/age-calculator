@@ -17,30 +17,28 @@ app.get("/howold", limiter, (req, res) => {
     if (!dob || isNaN(dob)) {
       return res
         .status(400)
-        .json({ message: "invalid query input", error: 400 });
+        .json({ message: "invalid query input", error: "400" });
     }
     const now = Date.now();
     const diff = now - dob;
 
     if (diff < 0) {
-      return res
-        .status(400)
-        .json({
-          message: "Invalid query input as age cannot be negative",
-          error: 400,
-        });
+      return res.status(400).json({
+        message: "Invalid query input as age cannot be negative",
+        error: "400",
+      });
     }
     const year = 1000 * 3600 * 24 * 365.25; //one year = 365 + 1/4 days
     const age = diff / year;
 
     return res.json({ age: Math.floor(age), message: "successful" });
   } catch (e) {
-    return res.status(500).json({ message: e.message, error: 500 });
+    return res.status(500).json({ message: e.message, error: "500" });
   }
 });
 
 app.use("*", (req, res) => {
-  res.status(404).json({ message: "404 Not Found", error: 404 });
+  res.status(404).json({ message: "404 Not Found", error: "404" });
 });
 
 module.exports = { app };
